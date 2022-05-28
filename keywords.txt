@@ -1,0 +1,9 @@
+# Syntax Coloring Map For EmbeddedMPC 
+
+# Datatypes (KEYWORD1)
+
+# Methods and Functions (KEYWORD2)
+
+# Instances (KEYWORD2)
+
+# Constants (LITERAL1)
