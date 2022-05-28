@@ -1,18 +1,20 @@
 #include "problem.hpp"
 
 MPCProblem::MPCProblem(int nstates, int ninputs, int nhorizon)
-    : nstates_(nstates), ninputs_(ninputs), nhorizon_(nhorizon), c_(0.0) {
-  A_.setZero();
-  B_.setZero();
-  f_.setZero();
-  x0_.setZero();
-  Qfdiag_.setZero();
-  qf_.setZero();
-  Qdiag_.setZero();
-  q_.setZero();
-  Rdiag_.setZero();
-  r_.setZero();
-}
+    : nstates_(nstates),
+      ninputs_(ninputs),
+      nhorizon_(nhorizon),
+      A_(StateMatrix::Zero(nstates, nstates)),
+      B_(InputMatrix::Zero(nstates, ninputs)),
+      f_(StateVector::Zero(nstates)),
+      x0_(StateVector::Zero(nstates)),
+      Qfdiag_(StateVector::Zero(nstates)),
+      qf_(StateVector::Zero(nstates)),
+      Qdiag_(StateVector::Zero(nstates)),
+      q_(StateVector::Zero(nstates)),
+      Rdiag_(InputVector::Zero(ninputs)),
+      r_(InputVector::Zero(ninputs)),
+      c_(0.0) {}
 
 /////////////////////////////////////////////
 // Setters
@@ -44,9 +46,9 @@ void MPCProblem::SetInitialState(const mpc_float* x0) {
 /////////////////////////////////////////////
 // Getters
 /////////////////////////////////////////////
-int MPCProblem::NumStates() const { return nstates_; } 
-int MPCProblem::NumInputs() const { return ninputs_; } 
-int MPCProblem::HorizonLength() const { return nhorizon_; } 
+int MPCProblem::NumStates() const { return nstates_; }
+int MPCProblem::NumInputs() const { return ninputs_; }
+int MPCProblem::HorizonLength() const { return nhorizon_; }
 
 void MPCProblem::GetCostTerminalCost(mpc_float* Qdata, mpc_float* qdata) const {
   memcpy(Qdata, Qfdiag_.data(), sizeof(mpc_float) * nstates_);
@@ -62,8 +64,7 @@ void MPCProblem::GetCostInputCost(mpc_float* Rdata, mpc_float* rdata) const {
 }
 mpc_float MPCProblem::GetCostConstant() const { return c_; }
 
-void MPCProblem::GetDynamics(mpc_float* Adata, mpc_float* Bdata,
-                             mpc_float* fdata) const {
+void MPCProblem::GetDynamics(mpc_float* Adata, mpc_float* Bdata, mpc_float* fdata) const {
   memcpy(Adata, A_.data(), sizeof(mpc_float) * nstates_ * nstates_);
   memcpy(Bdata, B_.data(), sizeof(mpc_float) * nstates_ * ninputs_);
   memcpy(fdata, f_.data(), sizeof(mpc_float) * nstates_);

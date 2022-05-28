@@ -1,22 +1,26 @@
-#include <ArduinoEigen.h>
+#pragma once
 
-#include "problemdata.hpp"
+#include <ArduinoEigen/Eigen/Dense>
+
+#include "EmbeddedMPC.h"
+
+// #include "problemdata.hpp"
 
 using mpc_float = float;
 
-using StateVector = Eigen::Vector<float, kNumStates>;
-using ErrorVector = Eigen::Vector<float, kNumErrStates>;
-using InputVector = Eigen::Vector<float, kNumInputs>;
-using StateMatrix = Eigen::Matrix<float, kNumStates, kNumStates>;
-using InputMatrix = Eigen::Matrix<float, kNumStates, kNumInputs>;
-using FeedbackGain = Eigen::Matrix<float, kNumInputs, kNumErrStates>;
+using StateVector = Eigen::Vector<float, Eigen::Dynamic>;
+using ErrorVector = Eigen::Vector<float, Eigen::Dynamic>;
+using InputVector = Eigen::Vector<float, Eigen::Dynamic>;
+using StateMatrix = Eigen::Matrix<float, Eigen::Dynamic, Eigen::Dynamic>;
+using InputMatrix = Eigen::Matrix<float, Eigen::Dynamic, Eigen::Dynamic>;
+using FeedbackGain = Eigen::Matrix<float, Eigen::Dynamic, Eigen::Dynamic>;
 
 class MPCProblem {
  public:
   MPCProblem(int nstates, int ninputs, int nhorizon);
   void SetCostTerminalCost(const mpc_float* Qdata, const mpc_float* qdata);
   void SetCostStateCost(const mpc_float* Qdata, const mpc_float* qdata);
-  void SetCostInputCost(const mpc_float* Qdata, const mpc_float* qdata);
+  void SetCostInputCost(const mpc_float* Rdata, const mpc_float* rdata);
   void SetCostConstant(mpc_float c);
   void SetDynamics(const mpc_float* Adata, const mpc_float* Bdata, const mpc_float* fdata);
   void SetInitialState(const mpc_float* x0);
