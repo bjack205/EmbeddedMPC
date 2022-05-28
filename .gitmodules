@@ -1,0 +1,3 @@
+[submodule "deps/ArduinoEigen"]
+	path = deps/ArduinoEigen
+	url = https://github.com/hideakitai/ArduinoEigen
