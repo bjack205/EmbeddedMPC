@@ -29,7 +29,7 @@ extern "C" {
 /* #undef DFLOAT */
 
 /* DLONG */
-#define DLONG
+/* #define DLONG */ 
 
 /* ENABLE_MKL_PARDISO */
 /* #undef ENABLE_MKL_PARDISO */

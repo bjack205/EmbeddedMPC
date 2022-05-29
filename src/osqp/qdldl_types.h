@@ -9,7 +9,7 @@ extern "C" {
 
 // QDLDL integer and float types
 
-typedef long long    QDLDL_int;   /* for indices */
+typedef int QDLDL_int;   /* for indices */
 typedef double  QDLDL_float; /* for numerical values  */
 typedef unsigned char   QDLDL_bool;  /* for boolean values  */
 
