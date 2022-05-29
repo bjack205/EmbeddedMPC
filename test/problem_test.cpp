@@ -3,6 +3,7 @@
 #include <gtest/gtest.h>
 
 #include "EmbeddedMPC.h"
+#include "problem.hpp"
 #include "doubleintegrator.h"
 
 TEST(ProblemTests, Constructor) {
@@ -13,14 +14,14 @@ TEST(ProblemTests, Constructor) {
   EXPECT_EQ(prob.HorizonLength(), nhorizon);
 }
 
-TEST(ProblemTests, SetDynamics) {
+TEST(ProblemTests, Dynamics) {
   int nhorizon = 3;
   MPCProblem prob(kNumStates, kNumInputs, nhorizon);
   prob.SetDynamics(Adata, Bdata, fdata);
+
   Eigen::MatrixXf A(kNumStates, kNumStates);
   Eigen::MatrixXf B(kNumStates, kNumInputs);
   Eigen::VectorXf f(kNumStates);
-
   prob.GetDynamics(A.data(), B.data(), f.data());
 
   Eigen::MatrixXf Atrue(kNumStates, kNumStates);

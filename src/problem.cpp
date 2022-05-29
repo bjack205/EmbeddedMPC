@@ -19,15 +19,15 @@ MPCProblem::MPCProblem(int nstates, int ninputs, int nhorizon)
 /////////////////////////////////////////////
 // Setters
 /////////////////////////////////////////////
-void MPCProblem::SetCostTerminalCost(const mpc_float* Qdata, const mpc_float* qdata) {
+void MPCProblem::SetCostTerminal(const mpc_float* Qdata, const mpc_float* qdata) {
   memcpy(Qfdiag_.data(), Qdata, sizeof(mpc_float) * nstates_);
   memcpy(qf_.data(), qdata, sizeof(mpc_float) * nstates_);
 }
-void MPCProblem::SetCostStateCost(const mpc_float* Qdata, const mpc_float* qdata) {
+void MPCProblem::SetCostState(const mpc_float* Qdata, const mpc_float* qdata) {
   memcpy(Qdiag_.data(), Qdata, sizeof(mpc_float) * nstates_);
   memcpy(q_.data(), qdata, sizeof(mpc_float) * nstates_);
 }
-void MPCProblem::SetCostInputCost(const mpc_float* Rdata, const mpc_float* rdata) {
+void MPCProblem::SetCostInput(const mpc_float* Rdata, const mpc_float* rdata) {
   memcpy(Rdiag_.data(), Rdata, sizeof(mpc_float) * ninputs_);
   memcpy(r_.data(), rdata, sizeof(mpc_float) * ninputs_);
 }
@@ -50,15 +50,15 @@ int MPCProblem::NumStates() const { return nstates_; }
 int MPCProblem::NumInputs() const { return ninputs_; }
 int MPCProblem::HorizonLength() const { return nhorizon_; }
 
-void MPCProblem::GetCostTerminalCost(mpc_float* Qdata, mpc_float* qdata) const {
+void MPCProblem::GetCostTerminal(mpc_float* Qdata, mpc_float* qdata) const {
   memcpy(Qdata, Qfdiag_.data(), sizeof(mpc_float) * nstates_);
   memcpy(qdata, qf_.data(), sizeof(mpc_float) * nstates_);
 }
-void MPCProblem::GetCostStateCost(mpc_float* Qdata, mpc_float* qdata) const {
+void MPCProblem::GetCostState(mpc_float* Qdata, mpc_float* qdata) const {
   memcpy(Qdata, Qdiag_.data(), sizeof(mpc_float) * nstates_);
   memcpy(qdata, q_.data(), sizeof(mpc_float) * nstates_);
 }
-void MPCProblem::GetCostInputCost(mpc_float* Rdata, mpc_float* rdata) const {
+void MPCProblem::GetCostInput(mpc_float* Rdata, mpc_float* rdata) const {
   memcpy(Rdata, Rdiag_.data(), sizeof(mpc_float) * ninputs_);
   memcpy(rdata, r_.data(), sizeof(mpc_float) * ninputs_);
 }

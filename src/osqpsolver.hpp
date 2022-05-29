@@ -1,55 +1,61 @@
 #pragma once
 
 #include "EmbeddedMPC.h"
+#include "osqp/qdldl_interface.h"
 #include "problem.hpp"
 
 class OSQPSolver {
  public:
-  void Initialize(const MPCProblem& prob);
+  void Initialize(const MPCProblem& prob, void* mem, int memsize);
   void Solve();
   void GetState(mpc_float* x, int k);
   void GetInput(mpc_float* u, int k);
+  int GetTotalMemorySize() const;
 
  private:
   void BuildKKTSystem();
+  void OSQPWorkspaceSetup(void* mem, int memsize);
+  int memsize_;
+
+  OSQPWorkspace work_;
+  OSQPData data_;
 
   // Data structure prototypes
   csc Pdata;
   csc Adata;
-  c_float qdata[172];
-  c_float ldata[304];
-  c_float udata[304];
-  OSQPData data;
+  c_float* qdata;
+  c_float* ldata;
+  c_float* udata;
 
-  // // Settings structure prototype
-  // OSQPSettings settings;
+  // Settings structure prototype
+  OSQPSettings settings;
 
-  // // Scaling structure prototypes
-  // c_float Dscaling[172];
-  // c_float Dinvscaling[172];
-  // c_float Escaling[304];
-  // c_float Einvscaling[304];
-  // OSQPScaling scaling;
+  // Scaling structure prototypes
+  c_float* Dscaling;     ///< primal scaling (nprimal,)
+  c_float* Dinvscaling;  //                  (nprimal,)
+  c_float* Escaling;     ///< dual scaling   (ndual,)
+  c_float* Einvscaling;  //                  (ndual,)
+  OSQPScaling scaling;
 
-  // // Prototypes for linsys_solver structure
-  // csc linsys_solver_L;
-  // c_float linsys_solver_Dinv[476];
-  // c_int linsys_solver_P[476];
-  // c_float linsys_solver_bp[476];
-  // c_float linsys_solver_sol[476];
-  // c_float linsys_solver_rho_inv_vec[304];
-  // c_int linsys_solver_Pdiag_idx[117];
-  // csc linsys_solver_KKT;
-  // c_int linsys_solver_PtoKKT[117];
-  // c_int linsys_solver_AtoKKT[1044];
-  // c_int linsys_solver_rhotoKKT[304];
-  // QDLDL_float linsys_solver_D[476];
-  // QDLDL_int linsys_solver_etree[476];
-  // QDLDL_int linsys_solver_Lnz[476];
-  // QDLDL_int linsys_solver_iwork[1428];
-  // QDLDL_bool linsys_solver_bwork[476];
-  // QDLDL_float linsys_solver_fwork[476];
-  // qdldl_solver linsys_solver;
+  // Prototypes for linsys_solver structure
+  csc linsys_solver_L;
+  c_float* linsys_solver_Dinv;         // (nprimal+ndual,)
+  c_int* linsys_solver_P;              // (nprimal+ndual,)
+  c_float* linsys_solver_bp;           // (nprimal+ndual,)
+  c_float* linsys_solver_sol;          // (nprimal+ndual,)
+  c_float* linsys_solver_rho_inv_vec;  // (ndual,)
+  c_int* linsys_solver_Pdiag_idx;      // (nprimal,)
+  csc linsys_solver_KKT;
+  c_int* linsys_solver_PtoKKT;       // (nprimal,)
+  c_int* linsys_solver_AtoKKT;       // (nnz?,)
+  c_int* linsys_solver_rhotoKKT;     // (ndual,)
+  QDLDL_float* linsys_solver_D;      // (nprimal+ndual,)
+  QDLDL_int* linsys_solver_etree;    // (nprimal+ndual,)
+  QDLDL_int* linsys_solver_Lnz;      // (nprimal+ndual,)
+  QDLDL_int* linsys_solver_iwork;    //
+  QDLDL_bool* linsys_solver_bwork;   // (nprimal_ndual,)
+  QDLDL_float* linsys_solver_fwork;  // (nprimal_ndual,)
+  qdldl_solver linsys_solver;
 
   // // Prototypes for solution
   // c_float xsolution[172];

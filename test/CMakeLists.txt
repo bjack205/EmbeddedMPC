@@ -13,3 +13,4 @@ endfunction()
 
 empc_test(problem_test)
 empc_test(memory_test)
+empc_test(osqpsolver_test)

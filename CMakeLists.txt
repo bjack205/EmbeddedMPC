@@ -42,6 +42,35 @@ target_include_directories(ArduinoEigen
 #############################################
 # Build
 #############################################
+set(OSQP_SOURCES
+  ${PROJECT_SOURCE_DIR}/src/osqp/auxil.c
+  ${PROJECT_SOURCE_DIR}/src/osqp/auxil.h
+  ${PROJECT_SOURCE_DIR}/src/osqp/constants.h
+  ${PROJECT_SOURCE_DIR}/src/osqp/error.c
+  ${PROJECT_SOURCE_DIR}/src/osqp/error.h
+  ${PROJECT_SOURCE_DIR}/src/osqp/glob_opts.h
+  ${PROJECT_SOURCE_DIR}/src/osqp/kkt.c
+  ${PROJECT_SOURCE_DIR}/src/osqp/kkt.h
+  ${PROJECT_SOURCE_DIR}/src/osqp/lin_alg.c
+  ${PROJECT_SOURCE_DIR}/src/osqp/lin_alg.h
+  ${PROJECT_SOURCE_DIR}/src/osqp/osqp.c
+  ${PROJECT_SOURCE_DIR}/src/osqp/osqp.h
+  ${PROJECT_SOURCE_DIR}/src/osqp/osqp_configure.h
+  ${PROJECT_SOURCE_DIR}/src/osqp/proj.c
+  ${PROJECT_SOURCE_DIR}/src/osqp/proj.h
+  ${PROJECT_SOURCE_DIR}/src/osqp/qdldl.c
+  ${PROJECT_SOURCE_DIR}/src/osqp/qdldl.h
+  ${PROJECT_SOURCE_DIR}/src/osqp/qdldl_interface.c
+  ${PROJECT_SOURCE_DIR}/src/osqp/qdldl_interface.h
+  ${PROJECT_SOURCE_DIR}/src/osqp/qdldl_types.h
+  ${PROJECT_SOURCE_DIR}/src/osqp/qdldl_version.h
+  ${PROJECT_SOURCE_DIR}/src/osqp/scaling.c
+  ${PROJECT_SOURCE_DIR}/src/osqp/scaling.h
+  ${PROJECT_SOURCE_DIR}/src/osqp/types.h
+  ${PROJECT_SOURCE_DIR}/src/osqp/util.c
+  ${PROJECT_SOURCE_DIR}/src/osqp/util.h
+)
+
 add_library(empc
   # src folder
   src/EmbeddedMPC.h
@@ -54,32 +83,7 @@ add_library(empc
   src/memory.hpp
 
   # osqp
-  src/osqp/auxil.c
-  src/osqp/auxil.h
-  src/osqp/constants.h
-  src/osqp/error.c
-  src/osqp/error.h
-  src/osqp/glob_opts.h
-  src/osqp/kkt.c
-  src/osqp/kkt.h
-  src/osqp/lin_alg.c
-  src/osqp/lin_alg.h
-  src/osqp/osqp.c
-  src/osqp/osqp.h
-  src/osqp/osqp_configure.h
-  src/osqp/proj.c
-  src/osqp/proj.h
-  src/osqp/qdldl.c
-  src/osqp/qdldl.h
-  src/osqp/qdldl_interface.c
-  src/osqp/qdldl_interface.h
-  src/osqp/qdldl_types.h
-  src/osqp/qdldl_version.h
-  src/osqp/scaling.c
-  src/osqp/scaling.h
-  src/osqp/types.h
-  src/osqp/util.c
-  src/osqp/util.h
+  ${OSQP_SOURCES}
 )
 target_link_libraries(empc
   PUBLIC
