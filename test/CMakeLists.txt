@@ -12,3 +12,4 @@ function(empc_test testname)
 endfunction()
 
 empc_test(problem_test)
+empc_test(memory_test)

@@ -50,6 +50,8 @@ add_library(empc
   src/osqpsolver.hpp
   src/problem.cpp
   src/problem.hpp
+  src/memory.cpp
+  src/memory.hpp
 
   # osqp
   src/osqp/auxil.c
