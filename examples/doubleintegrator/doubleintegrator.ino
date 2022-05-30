@@ -2,6 +2,7 @@
 
 #include <EmbeddedMPC.h>
 #include "workspace.h"
+#include "problem_data.h"
 
 #define LED_PIN 13
 
