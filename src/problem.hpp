@@ -7,12 +7,12 @@
 using mpc_float = double;
 using mpc_int = int;
 
-using StateVector = Eigen::Vector<float, Eigen::Dynamic>;
-using ErrorVector = Eigen::Vector<float, Eigen::Dynamic>;
-using InputVector = Eigen::Vector<float, Eigen::Dynamic>;
-using StateMatrix = Eigen::Matrix<float, Eigen::Dynamic, Eigen::Dynamic>;
-using InputMatrix = Eigen::Matrix<float, Eigen::Dynamic, Eigen::Dynamic>;
-using FeedbackGain = Eigen::Matrix<float, Eigen::Dynamic, Eigen::Dynamic>;
+using StateVector = Eigen::Vector<mpc_float, Eigen::Dynamic>;
+using ErrorVector = Eigen::Vector<mpc_float, Eigen::Dynamic>;
+using InputVector = Eigen::Vector<mpc_float, Eigen::Dynamic>;
+using StateMatrix = Eigen::Matrix<mpc_float, Eigen::Dynamic, Eigen::Dynamic>;
+using InputMatrix = Eigen::Matrix<mpc_float, Eigen::Dynamic, Eigen::Dynamic>;
+using FeedbackGain = Eigen::Matrix<mpc_float, Eigen::Dynamic, Eigen::Dynamic>;
 
 class MPCProblem {
  public:
@@ -30,6 +30,9 @@ class MPCProblem {
   void GetCostTerminal(mpc_float* Qdata, mpc_float* qdata) const;
   void GetCostState(mpc_float* Qdata, mpc_float* qdata) const;
   void GetCostInput(mpc_float* Rdata, mpc_float* rdata) const;
+  const mpc_float* GetCostDiagonalTerminal() const;
+  const mpc_float* GetCostDiagonalState() const;
+  const mpc_float* GetCostDiagonalInput() const;
   mpc_float GetCostConstant() const;
   void GetDynamics(mpc_float* Adata, mpc_float* Bdata, mpc_float* fdata) const;
   void GetInitialState(mpc_float* x0) const;

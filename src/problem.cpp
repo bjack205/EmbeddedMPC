@@ -72,3 +72,12 @@ void MPCProblem::GetDynamics(mpc_float* Adata, mpc_float* Bdata, mpc_float* fdat
 void MPCProblem::GetInitialState(mpc_float* x0) const {
   memcpy(x0, x0_.data(), sizeof(mpc_float) * nstates_);
 }
+const mpc_float* MPCProblem::GetCostDiagonalTerminal() const {
+  return Qfdiag_.data();
+}
+const mpc_float* MPCProblem::GetCostDiagonalState() const {
+  return Qdiag_.data();
+}
+const mpc_float* MPCProblem::GetCostDiagonalInput() const {
+  return Rdiag_.data();
+}
