@@ -25,7 +25,7 @@ void OSQPSolver::GetState(mpc_float* x, int k) const {
 void OSQPSolver::GetInput(mpc_float* u, int k) const {
   const c_float* sol = p_workspace_->solution->x;
   const int num_states_total = nhorizon_ * nstates_;
-  for (int i = 0; i < nstates_; ++i) {
+  for (int i = 0; i < ninputs_; ++i) {
     u[i] = sol[i + num_states_total + k * ninputs_];
   }
 }

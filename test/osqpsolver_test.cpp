@@ -1,13 +1,37 @@
+#include "osqpsolver.hpp"
+
 #include <fmt/core.h>
 #include <fmt/ostream.h>
 #include <gtest/gtest.h>
 
 #include "EmbeddedMPC.h"
-#include "osqpsolver.hpp"
 // #include "doubleintegrator.h"
-#include "workspace.h"
-#include "problem_data.h"
 #include "memory.cpp"
+#include "problem_data.h"
+#include "workspace.h"
+
+TEST(OSQPSolverTests, RawSolve) {
+  osqp_solve(&workspace);
+  // Print status
+  printf("Status:                %s\n", (&workspace)->info->status);
+  printf("Number of iterations:  %d\n", (int)((&workspace)->info->iter));
+  printf("Objective value:       %.4e\n", (&workspace)->info->obj_val);
+  printf("Primal residual:       %.4e\n", (&workspace)->info->pri_res);
+  printf("Dual residual:         %.4e\n", (&workspace)->info->dua_res);
+  c_float* x = workspace.solution->x;
+  printf("x0 = [ ");
+  for (int i = 0; i < 12; ++i) {
+    printf("%0.3g ", x[i]);
+  }
+  printf("]\n");
+
+  int nstates_total = 12 * 11;
+  printf("u0 = [ ");
+  for (int i = 0; i < 4; ++i) {
+    printf("%0.4g ", x[i + nstates_total]);
+  }
+  printf("]\n");
+}
 
 TEST(OSQPSolverTests, Initialization) {
   // Set up a double integrator problem
@@ -42,6 +66,10 @@ TEST(OSQPSolverTests, Solve) {
   Eigen::Vector<c_float, 4> u0;
   solver.GetState(x0.data(), 0);
   solver.GetInput(u0.data(), 0);
-  fmt::print("x0 = {}\n", x0);
-  fmt::print("u0 = {}\n", u0);
+  const c_float* sol = solver.GetSolution();
+  Eigen::Vector<c_float, 4> u_expected;
+  u_expected << 12.02562626, 12.02562626, 12.02562626, 12.02562626;
+  EXPECT_LT(x0.norm(), 1e-6);
+  EXPECT_LT((u0-u_expected).norm(), 1e-6);
+  EXPECT_STREQ(workspace.info->status, "solved");
 }

@@ -14,6 +14,7 @@ class OSQPSolver {
   void SetInitialState(const mpc_float* x0);
   void SetReferenceState(const mpc_float* xr);
   MPCProblem& GetProblem();
+  const c_float* GetSolution() const { return p_workspace_->solution->x; }
 
  private:
   void BuildKKTSystem();
