@@ -1,6 +1,10 @@
 function(empc_test testname)
     add_executable(${testname}
         ${testname}.cpp
+        workspace.h
+        workspace.c
+        problem_data.h
+        problem_data.c
     )
     target_link_libraries(${testname}
         PRIVATE

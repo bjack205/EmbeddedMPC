@@ -4,29 +4,33 @@
 
 #include "EmbeddedMPC.h"
 #include "problem.hpp"
-#include "doubleintegrator.h"
+// #include "doubleintegrator.h"
+#include "problem_data.h"
+
+const float h = 0.01;
+const float b = h * h / 2.0;
 
 TEST(ProblemTests, Constructor) {
   int nhorizon = 3;
-  MPCProblem prob(kNumStates, kNumInputs, nhorizon);
-  EXPECT_EQ(prob.NumStates(), kNumStates);
-  EXPECT_EQ(prob.NumInputs(), kNumInputs);
+  MPCProblem prob(nstates, ninputs, nhorizon);
+  EXPECT_EQ(prob.NumStates(), nstates);
+  EXPECT_EQ(prob.NumInputs(), ninputs);
   EXPECT_EQ(prob.HorizonLength(), nhorizon);
 }
 
 TEST(ProblemTests, Dynamics) {
   int nhorizon = 3;
-  MPCProblem prob(kNumStates, kNumInputs, nhorizon);
-  prob.SetDynamics(Adata, Bdata, fdata);
+  MPCProblem prob(nstates, ninputs, nhorizon);
+  prob.SetDynamics(dynamics_Adata, dynamics_Bdata, dynamics_fdata);
 
-  Eigen::MatrixXf A(kNumStates, kNumStates);
-  Eigen::MatrixXf B(kNumStates, kNumInputs);
-  Eigen::VectorXf f(kNumStates);
+  Eigen::MatrixXd A(nstates, nstates);
+  Eigen::MatrixXd B(nstates, ninputs);
+  Eigen::VectorXd f(nstates);
   prob.GetDynamics(A.data(), B.data(), f.data());
 
-  Eigen::MatrixXf Atrue(kNumStates, kNumStates);
-  Eigen::MatrixXf Btrue(kNumStates, kNumInputs);
-  Eigen::VectorXf ftrue(kNumStates);
+  Eigen::MatrixXd Atrue(nstates, nstates);
+  Eigen::MatrixXd Btrue(nstates, ninputs);
+  Eigen::VectorXd ftrue(nstates);
   // clang-format off
   Atrue << 1,0,h,0,
            0,1,0,h,

@@ -4,7 +4,7 @@
 
 // #include "problemdata.hpp"
 
-using mpc_float = float;
+using mpc_float = double;
 using mpc_int = int;
 
 using StateVector = Eigen::Vector<float, Eigen::Dynamic>;
