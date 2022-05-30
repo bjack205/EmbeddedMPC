@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.18.0)
+cmake_minimum_required(VERSION 3.21.0)
 list(APPEND CMAKE_MESSAGE_CONTEXT empc)
 project(EmbeddedMPC VERSION 0.1.0 LANGUAGES C CXX)
 
@@ -13,31 +13,33 @@ include(FetchContent)
 # Dependencies
 ##################################
 
-# GoogleTest
-FetchContent_Declare(googletest
-  URL https://github.com/google/googletest/archive/609281088cfefc76f9d0ce82e1ff6c30cc3591e5.zip
-)
-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-FetchContent_MakeAvailable(googletest)
-enable_testing()
-include(GoogleTest)
-include(CTest)
+if (${PROJECT_IS_TOP_LEVEL})
+  # GoogleTest
+  FetchContent_Declare(googletest
+    URL https://github.com/google/googletest/archive/609281088cfefc76f9d0ce82e1ff6c30cc3591e5.zip
+  )
+  set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+  FetchContent_MakeAvailable(googletest)
+  enable_testing()
+  include(GoogleTest)
+  include(CTest)
 
-# fmtlib
-include(FetchContent)
-FetchContent_Declare(fmt
-  GIT_REPOSITORY https://github.com/fmtlib/fmt
-  GIT_TAG d141cdbeb0fb422a3fb7173b285fd38e0d1772dc # version 8.0.1
-)
-FetchContent_MakeAvailable(fmt)
+  # fmtlib
+  include(FetchContent)
+  FetchContent_Declare(fmt
+    GIT_REPOSITORY https://github.com/fmtlib/fmt
+    GIT_TAG d141cdbeb0fb422a3fb7173b285fd38e0d1772dc # version 8.0.1
+  )
+  FetchContent_MakeAvailable(fmt)
 
-# Arduino Eigen
-set(ARDUINO_LIB_DIR "${PROJECT_SOURCE_DIR}/deps")
-add_library(ArduinoEigen INTERFACE)
-target_include_directories(ArduinoEigen
-  INTERFACE
-  ${ARDUINO_LIB_DIR}/ArduinoEigen
-)
+  # Arduino Eigen
+  set(ARDUINO_LIB_DIR "${PROJECT_SOURCE_DIR}/deps")
+  add_library(ArduinoEigen INTERFACE)
+  target_include_directories(ArduinoEigen
+    INTERFACE
+    ${ARDUINO_LIB_DIR}/ArduinoEigen
+  )
+endif()
 
 #############################################
 # Build

@@ -13,7 +13,10 @@ void OSQPSolver::Initialize(OSQPWorkspace* p_work) {
   p_workspace_ = p_work; 
 }
 
-void OSQPSolver::Solve() { osqp_solve(p_workspace_); }
+bool OSQPSolver::Solve() { 
+  osqp_solve(p_workspace_); 
+  return p_workspace_->info->status_val == OSQP_SOLVED;
+}
 
 void OSQPSolver::GetState(mpc_float* x, int k) const {
   const c_float* sol = p_workspace_->solution->x;

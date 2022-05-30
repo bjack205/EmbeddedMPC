@@ -8,7 +8,7 @@ class OSQPSolver {
  public:
   OSQPSolver(int nstates, int ninputs, int nhorizon);
   void Initialize(OSQPWorkspace* p_work);
-  void Solve();
+  bool Solve();
   void GetState(mpc_float* x, int k) const;
   void GetInput(mpc_float* u, int k) const;
   void SetInitialState(const mpc_float* x0);
