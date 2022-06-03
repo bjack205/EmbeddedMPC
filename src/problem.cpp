@@ -8,6 +8,9 @@ MPCProblem::MPCProblem(int nstates, int ninputs, int nhorizon)
       B_(InputMatrix::Zero(nstates, ninputs)),
       f_(StateVector::Zero(nstates)),
       x0_(StateVector::Zero(nstates)),
+      xe_(StateVector::Zero(nstates)),
+      ue_(StateVector::Zero(ninputs)),
+      xg_(StateVector::Zero(nstates)),
       Qfdiag_(StateVector::Zero(nstates)),
       qf_(StateVector::Zero(nstates)),
       Qdiag_(StateVector::Zero(nstates)),
@@ -43,6 +46,15 @@ void MPCProblem::SetInitialState(const mpc_float* x0) {
   memcpy(x0_.data(), x0, sizeof(mpc_float) * nstates_);
 }
 
+void MPCProblem::SetEquilibriumPoint(const mpc_float* xe, const mpc_float* ue) {
+  memcpy(xe_.data(), xe, sizeof(mpc_float) * nstates_);
+  memcpy(ue_.data(), ue, sizeof(mpc_float) * ninputs_);
+}
+
+void MPCProblem::SetGoalState(const mpc_float* x0) {
+  memcpy(xg_.data(), x0, sizeof(mpc_float) * nstates_);
+}
+
 /////////////////////////////////////////////
 // Getters
 /////////////////////////////////////////////
@@ -72,6 +84,13 @@ void MPCProblem::GetDynamics(mpc_float* Adata, mpc_float* Bdata, mpc_float* fdat
 void MPCProblem::GetInitialState(mpc_float* x0) const {
   memcpy(x0, x0_.data(), sizeof(mpc_float) * nstates_);
 }
+void MPCProblem::GetEquilibriumPoint(mpc_float* xeq, mpc_float* ueq) const {
+  memcpy(xeq, xe_.data(), sizeof(mpc_float) * nstates_);
+  memcpy(ueq, ue_.data(), sizeof(mpc_float) * ninputs_);
+}
+void MPCProblem::GetGoalState(mpc_float* xg) const {
+  memcpy(xg, xg_.data(), sizeof(mpc_float) * nstates_);
+}
 const mpc_float* MPCProblem::GetCostDiagonalTerminal() const {
   return Qfdiag_.data();
 }
@@ -80,4 +99,13 @@ const mpc_float* MPCProblem::GetCostDiagonalState() const {
 }
 const mpc_float* MPCProblem::GetCostDiagonalInput() const {
   return Rdiag_.data();
+}
+const mpc_float* MPCProblem::GetEquilibriumState() const {
+  return xe_.data();
+}
+const mpc_float* MPCProblem::GetEquilibriumInput() const {
+  return ue_.data();
+}
+const mpc_float* MPCProblem::GetGoalState() const {
+  return xg_.data();
 }

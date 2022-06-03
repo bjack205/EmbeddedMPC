@@ -8,7 +8,6 @@ OSQPSolver::OSQPSolver(int nstates, int ninputs, int nhorizon)
       prob_(nstates_, ninputs_, nhorizon_) {}
 
 void OSQPSolver::Initialize(OSQPWorkspace* p_work) {
-
   // Move workspace to class
   p_workspace_ = p_work; 
 }
@@ -58,3 +57,21 @@ void OSQPSolver::SetReferenceState(const mpc_float* xr) {
 }
 
 MPCProblem& OSQPSolver::GetProblem() { return prob_; }
+
+bool OSQPSolver::GetControl(mpc_float* u, const mpc_float* dx, mpc_float t) {
+  SetInitialState(dx);
+  bool solve_successful = Solve();
+  GetInput(u, 0);
+
+  // Add equilibrium control
+  const int m = prob_.NumInputs();
+  const mpc_float* ueq = prob_.GetEquilibriumInput();
+  for (int i = 0; i < m; ++i) {
+    if (solve_successful) {
+      u[i] += ueq[i];
+    } else {
+      u[i] = ueq[i];
+    }
+  }
+  return solve_successful;
+}

@@ -66,10 +66,43 @@ TEST(OSQPSolverTests, Solve) {
   Eigen::Vector<c_float, 4> u0;
   solver.GetState(x0.data(), 0);
   solver.GetInput(u0.data(), 0);
-  const c_float* sol = solver.GetSolution();
   Eigen::Vector<c_float, 4> u_expected;
-  u_expected << 12.02562626, 12.02562626, 12.02562626, 12.02562626;
-  EXPECT_LT(x0.norm(), 1e-6);
-  EXPECT_LT((u0-u_expected).norm(), 1e-6);
+  // u_expected << 12.02562626, 12.02562626, 12.02562626, 12.02562626;
+  u_expected << 55.43705474, 55.43705474, 55.43705474, 55.43705474;
+  EXPECT_LT(x0.norm(), 1e-5);
+  EXPECT_LT((u0-u_expected).norm(), 1e-5);
   EXPECT_STREQ(workspace.info->status, "solved");
+}
+
+TEST(OSQPSolverTests, GetControl) {
+  OSQPSolver solver(nstates, ninputs, nhorizon);
+  MPCProblem& prob = solver.GetProblem();
+  prob.SetDynamics(dynamics_Adata, dynamics_Bdata, dynamics_fdata);
+  prob.SetCostTerminal(cost_Qfdata, cost_qfdata);
+  prob.SetCostState(cost_Qdata, cost_qdata);
+  prob.SetCostInput(cost_Rdata, cost_rdata);
+  prob.SetCostConstant(0.0);
+  prob.SetEquilibriumPoint(dynamics_xe, dynamics_ue);
+  prob.SetGoalState(dynamics_xg);
+
+  solver.Initialize(&workspace);
+  Eigen::Vector<mpc_float,13> xe = Eigen::Vector<mpc_float, 13>::Zero();
+  Eigen::Vector<mpc_float,4> ue = Eigen::Vector<mpc_float, 4>::Zero();
+  Eigen::Vector<mpc_float,13> x0 = Eigen::Vector<mpc_float, 13>::Zero();
+  Eigen::Vector<mpc_float,13> xg = Eigen::Vector<mpc_float, 13>::Zero();
+  prob.GetEquilibriumPoint(xe.data(), ue.data());
+  prob.GetGoalState(xg.data());
+  prob.GetInitialState(x0.data());
+  // solver.GetControl()
+  // solver.Solve();
+  // Eigen::Vector<c_float, 12> x0;
+  // Eigen::Vector<c_float, 4> u0;
+  // solver.GetState(x0.data(), 0);
+  // solver.GetInput(u0.data(), 0);
+  // Eigen::Vector<c_float, 4> u_expected;
+  // // u_expected << 12.02562626, 12.02562626, 12.02562626, 12.02562626;
+  // u_expected << 55.43705474, 55.43705474, 55.43705474, 55.43705474;
+  // EXPECT_LT(x0.norm(), 1e-5);
+  // EXPECT_LT((u0-u_expected).norm(), 1e-5);
+  // EXPECT_STREQ(workspace.info->status, "solved");
 }

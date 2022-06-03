@@ -23,6 +23,8 @@ class MPCProblem {
   void SetCostConstant(mpc_float c);
   void SetDynamics(const mpc_float* Adata, const mpc_float* Bdata, const mpc_float* fdata);
   void SetInitialState(const mpc_float* x0);
+  void SetEquilibriumPoint(const mpc_float* xe, const mpc_float* ue);
+  void SetGoalState(const mpc_float* xg);
 
   int NumStates() const;
   int NumInputs() const;
@@ -36,6 +38,11 @@ class MPCProblem {
   mpc_float GetCostConstant() const;
   void GetDynamics(mpc_float* Adata, mpc_float* Bdata, mpc_float* fdata) const;
   void GetInitialState(mpc_float* x0) const;
+  void GetEquilibriumPoint(mpc_float* xe, mpc_float* ue) const;
+  void GetGoalState(mpc_float* xg) const;
+  const mpc_float* GetEquilibriumState() const;
+  const mpc_float* GetEquilibriumInput() const;
+  const mpc_float* GetGoalState() const;
 
  private:
   int nstates_;
@@ -47,6 +54,9 @@ class MPCProblem {
   InputMatrix B_;
   StateVector f_;
   StateVector x0_;
+  StateVector xe_;
+  InputVector ue_;
+  StateVector xg_;
 
   // Cost
   StateVector Qfdiag_;
